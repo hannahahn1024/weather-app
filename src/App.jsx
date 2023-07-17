@@ -1,10 +1,23 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import reactLogo from './assets/react.svg'
 import viteLogo from '/vite.svg'
 import './App.css'
 
 function App() {
   const [count, setCount] = useState(0)
+  
+  Promise.all([
+    fetch('http://api.weatherapi.com/v1/current.json?key=MY_KEY&q=Los Angeles'),
+    fetch('http://api.weatherapi.com/v1/forecast.json?key=MY_KEY&q=Los Angeles&days=7')
+  ]).then(function (responses) {
+    return Promise.all(responses.map(function (response) {
+      return response.json();
+    }))
+  }).then(function (data) {
+    console.log(data);
+  });
+
+
 
   return (
     <>
@@ -18,7 +31,7 @@ function App() {
       </div>
       <h1>Vite + React</h1>
       <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
+        <button onClick={() => console.log(`${import.meta.env.REACT_APP_MY_KEY}`)}>
           count is {count}
         </button>
         <p>
